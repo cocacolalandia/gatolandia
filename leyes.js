@@ -1808,4 +1808,4 @@ La presente Ley entrará en vigor inmediatamente de su publicación en el BOR.`,
                 historial: ['06/03/2023 · Publicación inicial (BOR nº 006)']
 
             }
-        ]
+        ];
