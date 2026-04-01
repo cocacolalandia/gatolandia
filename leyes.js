@@ -2037,6 +2037,6 @@ clausura de servicios;
 responsabilidad penal en casos extremos.
 
 DISPOSICIÓN FINAL
-La presente Ley entrará en vigor independientemente de su publicación en el BOR.`
+La presente Ley entrará en vigor independientemente de su publicación en el BOR.`;
             }
         ];
