@@ -1637,7 +1637,7 @@ Direccional perpendicular que conecta la línea de 2 m con la advertencia del bo
 5. Paradas de autobús
 Advertencia en toda la zona donde se detiene el bus.
 
-Direccional desde fachada hasta la advertencia, centrado.
+Direccional desde fachada hasta la advertencia, guiando a la persona hasta exactamente donde se encuentre la puerta de acceso al autobús.
 
 Debe permitir que la persona llegue justo al punto de embarque.
 
@@ -1652,6 +1652,8 @@ Artículo 9. Colores
 Rosa: uso general en ciudad, edificios y espacios públicos.
 
 Amarillo: uso exclusivo en transporte público (andenes, paradas, estaciones).
+
+El pavimento podotáctil en paradas de autobus será amarillo en todo el andén y el color rosa se reservará para el pavimento direccional en las paradas de autobús.
 
 Contraste mínimo: 70% respecto al pavimento.
 
