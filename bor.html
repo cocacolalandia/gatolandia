@@ -6,264 +6,480 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BOR · Boletín Oficial del Reino de Gatolandia</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
     <style>
         :root {
-            --azul: #0d2b45;
-            --azul2: #1b4f72;
-            --gris: #f4f6f8;
-            --borde: #d0d7de
+            --primary: #0f172a;
+            --accent: #d4af37;
+            --accent-glow: rgba(212, 175, 55, 0.3);
+            --bg-body: #f1f5f9;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: rgba(226, 232, 240, 0.8);
         }
 
         * {
+            margin: 0;
+            padding: 0;
             box-sizing: border-box;
-            font-family: Segoe UI, Arial, sans-serif
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         body {
-            margin: 0;
-            background: var(--gris)
-        }
-
-        header {
-            background: linear-gradient(90deg, var(--azul), var(--azul2));
-            color: #fff;
-            padding: 28px
-        }
-
-        main {
-            max-width: 1100px;
-            margin: auto;
-            padding: 30px
-        }
-
-        .ley {
-            background: #fff;
-            border: 1px solid var(--borde);
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 16px;
-            box-shadow: 0 6px 16px rgba(0, 0, 0, .05)
-        }
-
-        .ley h2 {
-            margin: 0 0 6px;
-            color: var(--azul)
-        }
-
-        .ley .meta {
-            color: #555;
-            font-size: .9rem
-        }
-
-        .btn {
-            margin-top: 10px;
-            background: var(--azul);
-            color: #fff;
-            border: none;
-            padding: 10px 16px;
-            border-radius: 6px;
-            cursor: pointer
-        }
-
-        .btn:hover {
-            background: var(--azul2)
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, .6);
-            z-index: 1000
-        }
-
-        .modal.activo {
-            display: block
-        }
-
-        .modal-contenido {
-            background: #fff;
-            width: 94%;
-            height: 94%;
-            margin: 2% auto;
-            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-body);
+            color: var(--text-main);
+            height: 100vh;
             display: flex;
-            flex-direction: column
+            flex-direction: column;
+            overflow-x: hidden;
         }
 
-        .modal-barra {
-            background: var(--azul);
-            color: #fff;
-            padding: 10px;
+        /* NAVEGACIÓN */
+        nav {
+            background: var(--primary);
+            padding: 12px 40px;
             display: flex;
             align-items: center;
-            gap: 10px
+            justify-content: space-between;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+            border-bottom: 2px solid var(--accent);
         }
 
-        .modal-barra button {
-            background: none;
-            border: none;
-            color: #fff;
-            font-size: 1.1rem;
-            cursor: pointer
-        }
-
-        .modal-titulo {
-            flex: 1;
-            text-align: center
-        }
-
-        .modal-cuerpo {
+        .brand {
             display: flex;
-            flex: 1;
-            overflow: hidden
+            align-items: center;
+            gap: 15px;
         }
 
-        aside {
-            width: 280px;
-            border-right: 1px solid var(--borde);
-            padding: 15px;
-            overflow-y: auto;
-            background: #fafafa
+        .brand img {
+            width: 45px;
+            height: 30px;
+            border-radius: 4px;
+            border: 1px solid var(--accent);
         }
 
-        aside h3 {
-            margin-top: 0
+        .brand h1 {
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        aside a {
-            display: block;
-            color: var(--azul);
-            text-decoration: none;
-            font-size: .9rem;
-            margin-bottom: 6px
+        /* HEADER & BUSCADOR */
+        header {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            padding: 50px 20px;
+            text-align: center;
+            position: relative;
         }
 
-        article#textoLey {
-            flex: 1;
-            padding: 30px;
-            overflow-y: auto;
-            white-space: pre-line;
-            line-height: 1.7
-        }
-
-        #historial {
-            padding: 20px;
-            border-top: 1px solid var(--borde)
+        .search-wrapper {
+            position: relative;
+            max-width: 600px;
+            margin: 25px auto 0;
+            z-index: 2;
         }
 
         #buscadorGlobal {
-            margin-bottom: 15px;
-            padding: 8px;
-            width: 300px;
-            border-radius: 6px;
-            border: 1px solid var(--borde)
+            width: 100%;
+            padding: 16px 25px 16px 55px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+            color: var(--primary);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            outline: none;
         }
 
+        .search-wrapper i {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+
+        /* LISTADO DE LEYES */
+        main {
+            flex: 1;
+            padding: 40px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .ley-card {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .ley-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            border-color: var(--accent);
+        }
+
+        .ley-card h2 {
+            font-size: 1.2rem;
+            color: var(--primary);
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .ley-card .meta {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* MODAL FULLSCREEN */
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-body);
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            background: white;
+            padding: 12px 30px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .modal-body {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* SIDEBAR / INDICE */
+        .modal-sidebar {
+            width: 320px;
+            background: #f8fafc;
+            border-right: 1px solid var(--border);
+            padding: 25px;
+            overflow-y: auto;
+        }
+
+        #indice a {
+            display: block;
+            padding: 10px 12px;
+            margin-bottom: 5px;
+            border-radius: 8px;
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 0.85rem;
+            border: 1px solid transparent;
+        }
+
+        #indice a:hover {
+            background: white;
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* CONTENIDO DE LEY */
+        .modal-content-area {
+            flex: 1;
+            padding: 50px;
+            overflow-y: auto;
+            background: white;
+            scroll-behavior: smooth;
+        }
+
+        .legal-text {
+            max-width: 850px;
+            margin: 0 auto;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #334155;
+            padding-bottom: 100px;
+        }
+
+        /* BOTONES ACCION */
+        .action-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-muted);
+            background: white;
+        }
+
+        .action-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .tag-vigente {
+            background: #dcfce7;
+            color: #166534;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.75rem;
+        }
+
+        /* TOAST NOTIFICATION */
+        #toast-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 9999;
+        }
+
+        @media (max-width: 900px) {
+            .modal-sidebar {
+                display: none;
+            }
+
+            .modal-content-area {
+                padding: 25px;
+            }
+        }
+
+        /* --- MEJORA EXCLUSIVA DE IMPRESIÓN --- */
         @media print {
 
+            nav,
             header,
             main,
-            aside,
-            .modal-barra {
-                display: none
+            .modal-header,
+            .modal-sidebar,
+            #toast-container,
+            .action-btn {
+                display: none !important;
             }
 
             .modal,
-            .modal-contenido,
-            #textoLey,
-            #historial {
+            .modal-body,
+            .modal-content-area {
+                display: block !important;
+                position: static !important;
+                overflow: visible !important;
+                width: 100% !important;
+                height: auto !important;
+                background: white !important;
+            }
+
+            .legal-text {
+                max-width: 100% !important;
+                padding: 20px !important;
+                font-family: "Times New Roman", serif !important;
+                color: black !important;
+                line-height: 1.6 !important;
+            }
+
+            /* Encabezado oficial en el papel */
+            .legal-text::before {
+                content: "BOLETÍN OFICIAL DEL REINO DE GATOLANDIA";
                 display: block;
-                position: static;
-                width: 100%;
-                height: auto
+                text-align: center;
+                font-weight: bold;
+                font-size: 16pt;
+                border-bottom: 2px solid black;
+                margin-bottom: 30px;
+                padding-bottom: 10px;
+            }
+        }
+
+        /* Animación de entrada */
+        .modal.activo {
+            display: flex;
+            animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        /* Animación de salida */
+        .modal.saliendo {
+            display: flex;
+            animation: slideDown 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(0);
+                opacity: 1;
+            }
+
+            to {
+                transform: translateY(100%);
+                opacity: 0;
             }
         }
     </style>
 </head>
 
 <body>
+
+    <nav>
+        <div class="brand">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSmc--YeQPZVE_Rs3xrp3DhwyCJe9lVXL0LqA&s" alt="Flag">
+            <h1>Reino de Gatolandia <span style="font-weight: 300; opacity: 0.6;">| BOR</span></h1>
+        </div>
+        <div style="display: flex; gap: 10px;">
+            <button onclick="location.href='https://sites.google.com/view/gatogob-sede';" class="action-btn" target="_blank"><i class="fa-solid fa-landmark"></i></button>
+            <div class="action-btn"><i class="fa-solid fa-shield-cat"></i></div>
+        </div>
+    </nav>
+
     <header>
-        <h1>Boletín Oficial del Reino de Gatolandia</h1>
-        <input type="text" id="buscadorGlobal" placeholder="Buscar en todas las leyes...">
+        <h2 style="color: white; font-size: 2.2rem; font-weight: 800;">Boletín Oficial del Reino</h2>
+        <p style="color: rgba(255,255,255,0.6);">Base de datos jurídica oficial y actualizada</p>
+        <div class="search-wrapper">
+            <i class="fa-solid fa-search"></i>
+            <input type="text" id="buscadorGlobal" placeholder="Buscar por título o número de BOR...">
+        </div>
     </header>
+
     <main id="lista"></main>
+
     <div id="modal" class="modal">
-        <div class="modal-contenido">
-            <div class="modal-barra">
-                <button onclick="cerrarLey()"><i class="fa-solid fa-arrow-left"></i></button>
-                <div class="modal-titulo">
-                    <div style="font-size:.85rem">BOLETÍN OFICIAL DEL REINO DE GATOLANDIA</div>
-                    <div style="font-size:.75rem;opacity:.9">Publicación oficial del Estado</div>
-                </div>
-                <button onclick="copiarLey()"><i class="fa-solid fa-copy"></i></button>
-                <input type="text" id="buscadorLey" placeholder="Buscar en esta ley..." style="padding:5px;border-radius:5px;border:none;width:200px">
-                <button onclick="window.print()"><i class="fa-solid fa-print"></i></button>
-                <button onclick="window.print()"><i class="fa-solid fa-file-pdf"></i></button>
+        <div class="modal-header">
+            <div class="action-btn" onclick="cerrarLey()"><i class="fa-solid fa-chevron-down"></i></div>
+            <div style="flex: 1;">
+                <div id="modal-titulo" style="font-weight: 800; color: var(--primary); font-size: 1rem; line-height: 1.2;"></div>
+                <div id="modal-meta" style="font-size: 0.75rem; color: var(--text-muted);"></div>
             </div>
-            <div class="modal-cuerpo">
-                <aside>
-                    <h3>Índice</h3>
-                    <div id="indice"></div>
-                    <hr>
-                    <strong>Estado</strong>
-                    <div id="estado"></div>
-                </aside>
-                <div style="flex:1;display:flex;flex-direction:column;overflow:hidden">
-                    <article id="textoLey"></article>
-                    <section id="historial" style="display:none">
-                        <h3>Historial de modificaciones</h3>
-                        <ul id="listaHistorial"></ul>
-                    </section>
-                </div>
+            <div class="tag-vigente" id="estado-tag">Vigente</div>
+            <div class="action-btn" onclick="copiarLey()" title="Copiar Texto"><i class="fa-solid fa-copy"></i></div>
+            <div class="action-btn" onclick="window.print()" title="Imprimir Ley"><i class="fa-solid fa-print"></i></div>
+        </div>
+
+        <div class="modal-body">
+            <aside class="modal-sidebar">
+                <h4 style="font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 15px; letter-spacing: 1px;">Índice Navegable</h4>
+                <div id="indice"></div>
+                <hr style="margin: 25px 0; border: 0; border-top: 1px solid var(--border);">
+                <h4 style="font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 15px; letter-spacing: 1px;">Historial</h4>
+                <div id="historial-lista" style="font-size: 0.8rem; color: var(--text-muted);"></div>
+            </aside>
+
+            <div class="modal-content-area" id="modal-scroll-area">
+                <article class="legal-text" id="textoLey"></article>
             </div>
         </div>
     </div>
+
+    <div id="toast-container"></div>
+
     <script src="leyes.js"></script>
+
     <script>
         const lista = document.getElementById('lista');
         const modal = document.getElementById('modal');
-        const textoLey = document.getElementById('textoLey');
-        const indice = document.getElementById('indice');
-        const estadoEl = document.getElementById('estado');
-        const historialBloque = document.getElementById('historial');
-        const listaHistorial = document.getElementById('listaHistorial');
         let textoOriginal = '';
-        LEYES.forEach(l => {
-            const d = document.createElement('div');
-            d.className = 'ley';
-            d.innerHTML = `<h2>${l.titulo}</h2><div class="meta">${l.meta}</div><button class="btn">Abrir ley</button>`;
-            d.querySelector('button').onclick = () => abrirLey(l);
-            lista.appendChild(d);
-        });
+
+        function notify(msg) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.style.cssText = `background: var(--primary); color: white; padding: 12px 20px; border-radius: 10px; margin-top: 10px; box-shadow: 0 10px 20px rgba(0,0,0,0.2); font-size: 0.9rem; font-weight: 600; display: flex; align-items: center; gap: 10px; animation: slideIn 0.3s ease-out;`;
+            toast.innerHTML = `<i class="fa-solid fa-circle-check" style="color:var(--accent)"></i> ${msg}`;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 500);
+            }, 3000);
+        }
+
+        window.onload = () => {
+            if (typeof LEYES !== 'undefined') {
+                LEYES.forEach(l => {
+                    const card = document.createElement('div');
+                    card.className = 'ley-card';
+                    card.innerHTML = `
+                    <div>
+                        <div class="meta"><i class="fa-solid fa-file-shield"></i> DOCUMENTO OFICIAL</div>
+                        <h2>${l.titulo}</h2>
+                        <div class="meta"><i class="fa-solid fa-stamp"></i> ${l.meta}</div>
+                    </div>
+                    <div style="margin-top:20px; font-weight:700; font-size:0.8rem; color:var(--accent)">VER DOCUMENTO <i class="fa-solid fa-arrow-right"></i></div>
+                `;
+                    card.onclick = () => abrirLey(l);
+                    lista.appendChild(card);
+                });
+            }
+        };
 
         function abrirLey(l) {
-            textoLey.innerHTML = '';
+            document.getElementById('modal-titulo').textContent = l.titulo;
+            document.getElementById('modal-meta').textContent = l.meta;
+            document.getElementById('estado-tag').textContent = l.estado;
+
+            const contentArea = document.getElementById('textoLey');
+            const indice = document.getElementById('indice');
+            contentArea.innerHTML = '';
             indice.innerHTML = '';
-            listaHistorial.innerHTML = '';
-            estadoEl.textContent = l.estado;
             textoOriginal = l.texto;
+
             l.texto.split('\n').forEach((line, i) => {
-                const div = document.createElement('div');
-                div.textContent = line;
-                if (line.startsWith('TÍTULO') || line.startsWith('Artículo')) {
-                    div.id = 'p' + i;
+                if (!line.trim()) return;
+                const p = document.createElement('p');
+                p.textContent = line;
+                p.style.marginBottom = "18px";
+
+                if (line.startsWith('TÍTULO') || line.startsWith('Artículo') || line.startsWith('PREÁMBULO') || line.startsWith('DISPOSICIÓN')) {
+                    const sid = 'section-' + i;
+                    p.id = sid;
+                    p.style.cssText = "color:var(--primary); font-weight:800; font-size:1.2rem; margin-top:40px; border-left:4px solid var(--accent); padding-left:15px; scroll-margin-top:30px;";
+
                     const a = document.createElement('a');
-                    a.textContent = line;
-                    a.href = '#' + div.id;
+                    a.href = "#";
+                    a.innerHTML = `<i class="fa-solid fa-chevron-right" style="font-size:0.6rem; opacity:0.5"></i> ${line.substring(0, 35)}...`;
+                    a.onclick = (e) => {
+                        e.preventDefault();
+                        document.getElementById(sid).scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    };
                     indice.appendChild(a);
                 }
-                textoLey.appendChild(div);
+                contentArea.appendChild(p);
             });
-            if (l.historial && l.historial.length) {
-                historialBloque.style.display = 'block';
-                l.historial.forEach(h => {
-                    const li = document.createElement('li');
-                    li.textContent = h;
-                    listaHistorial.appendChild(li);
-                });
-            } else historialBloque.style.display = 'none';
+
+            document.getElementById('historial-lista').innerHTML = (l.historial || []).map(h => `<div style="margin-bottom:8px"><i class="fa-solid fa-circle-dot" style="font-size:0.5rem"></i> ${h}</div>`).join('');
+
             modal.classList.add('activo');
+            document.getElementById('modal-scroll-area').scrollTop = 0;
         }
 
         function cerrarLey() {
@@ -271,59 +487,37 @@
         }
 
         function copiarLey() {
-    if (!textoOriginal) return;
-
-    // 1. Crear el elemento temporal
-    const textArea = document.createElement("textarea");
-    textArea.value = textoOriginal;
-    
-    // 2. Asegurarnos de que sea invisible pero esté en el DOM
-    textArea.style.position = "absolute";
-    textArea.style.left = "-9999px";
-    textArea.style.top = "0";
-    document.body.appendChild(textArea);
-    
-    // 3. Selección y copia (el truco está en estas líneas)
-    textArea.focus();
-    textArea.select();
-    textArea.setSelectionRange(0, 99999); // Para móviles
-    
-    try {
-        const exitoso = document.execCommand('copy');
-        if (exitoso) {
-            alert("¡Copiado con éxito!");
-        } else {
-            console.error("No se pudo copiar");
+            const el = document.createElement('textarea');
+            el.value = textoOriginal;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+            notify("Copiado al portapapeles con éxito");
         }
-    } catch (err) {
-        console.error("Error al intentar copiar:", err);
-    }
-    
-    // 4. Limpiar
-    document.body.removeChild(textArea);
-}
 
-        // Buscador en la ley
-        const buscadorLey = document.getElementById('buscadorLey');
-        buscadorLey.addEventListener('input', () => {
-            const q = buscadorLey.value.trim();
-            const regex = new RegExp(q, 'gi');
-            textoLey.querySelectorAll('div').forEach(d => {
-                d.style.background = '';
-                if (q && regex.test(d.textContent)) d.style.background = 'yellow';
-            });
-        });
-
-        // Buscador global
-        const buscadorGlobal = document.getElementById('buscadorGlobal');
-        buscadorGlobal.addEventListener('input', () => {
-            const q = buscadorGlobal.value.trim().toLowerCase();
-            lista.querySelectorAll('.ley').forEach(l => {
-                const texto = l.querySelector('.meta').previousSibling.textContent + l.querySelector('.meta').textContent;
-                l.style.display = texto.toLowerCase().includes(q) ? 'block' : 'none';
+        document.getElementById('buscadorGlobal').addEventListener('input', (e) => {
+            const q = e.target.value.toLowerCase();
+            document.querySelectorAll('.ley-card').forEach(c => {
+                c.style.display = c.innerText.toLowerCase().includes(q) ? 'flex' : 'none';
             });
         });
     </script>
+
+    <style>
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    </style>
+
 </body>
 
 </html>
