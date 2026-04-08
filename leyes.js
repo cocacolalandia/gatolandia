@@ -1813,9 +1813,8 @@ La presente Ley entrará en vigor inmediatamente de su publicación en el BOR.`,
             {
                 id: 'loidg',
                 titulo: 'Ley Orgánica de Independencia Digital de Gatolandia',
-                meta: 'BOR nº 007 · 1 de abril de 2026 · Asamblea Nacoinal',
+                meta: 'BOR nº 007 · 1 de abril de 2026 · Asamblea Nacional',
                 estado: 'Vigente',
-                historial: ['1/4/2026 · Publicación inicial (BOR nº 007'],
                 texto: `LEY ORGÁNICA 7/2026, DE 1 DE ABRIL, DE INDEPENDENCIA DIGITAL DE GATOLANDIA (LOIDG)
 
 PREÁMBULO
@@ -2038,5 +2037,6 @@ responsabilidad penal en casos extremos.
 
 DISPOSICIÓN FINAL
 La presente Ley entrará en vigor independientemente de su publicación en el BOR.`,
+                                    historial: ['1/4/2026 · Publicación inicial (BOR nº 007)']
             }
         ];
