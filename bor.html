@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BOR · Boletín Oficial del Reino de Gatolandia</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --azul: #0d2b45;
+            --azul2: #1b4f72;
+            --gris: #f4f6f8;
+            --borde: #d0d7de
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: Segoe UI, Arial, sans-serif
+        }
+
+        body {
+            margin: 0;
+            background: var(--gris)
+        }
+
+        header {
+            background: linear-gradient(90deg, var(--azul), var(--azul2));
+            color: #fff;
+            padding: 28px
+        }
+
+        main {
+            max-width: 1100px;
+            margin: auto;
+            padding: 30px
+        }
+
+        .ley {
+            background: #fff;
+            border: 1px solid var(--borde);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, .05)
+        }
+
+        .ley h2 {
+            margin: 0 0 6px;
+            color: var(--azul)
+        }
+
+        .ley .meta {
+            color: #555;
+            font-size: .9rem
+        }
+
+        .btn {
+            margin-top: 10px;
+            background: var(--azul);
+            color: #fff;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 6px;
+            cursor: pointer
+        }
+
+        .btn:hover {
+            background: var(--azul2)
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .6);
+            z-index: 1000
+        }
+
+        .modal.activo {
+            display: block
+        }
+
+        .modal-contenido {
+            background: #fff;
+            width: 94%;
+            height: 94%;
+            margin: 2% auto;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column
+        }
+
+        .modal-barra {
+            background: var(--azul);
+            color: #fff;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px
+        }
+
+        .modal-barra button {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.1rem;
+            cursor: pointer
+        }
+
+        .modal-titulo {
+            flex: 1;
+            text-align: center
+        }
+
+        .modal-cuerpo {
+            display: flex;
+            flex: 1;
+            overflow: hidden
+        }
+
+        aside {
+            width: 280px;
+            border-right: 1px solid var(--borde);
+            padding: 15px;
+            overflow-y: auto;
+            background: #fafafa
+        }
+
+        aside h3 {
+            margin-top: 0
+        }
+
+        aside a {
+            display: block;
+            color: var(--azul);
+            text-decoration: none;
+            font-size: .9rem;
+            margin-bottom: 6px
+        }
+
+        article#textoLey {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+            white-space: pre-line;
+            line-height: 1.7
+        }
+
+        #historial {
+            padding: 20px;
+            border-top: 1px solid var(--borde)
+        }
+
+        #buscadorGlobal {
+            margin-bottom: 15px;
+            padding: 8px;
+            width: 300px;
+            border-radius: 6px;
+            border: 1px solid var(--borde)
+        }
+
+        @media print {
+
+            header,
+            main,
+            aside,
+            .modal-barra {
+                display: none
+            }
+
+            .modal,
+            .modal-contenido,
+            #textoLey,
+            #historial {
+                display: block;
+                position: static;
+                width: 100%;
+                height: auto
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Boletín Oficial del Reino de Gatolandia</h1>
+        <input type="text" id="buscadorGlobal" placeholder="Buscar en todas las leyes...">
+    </header>
+    <main id="lista"></main>
+    <div id="modal" class="modal">
+        <div class="modal-contenido">
+            <div class="modal-barra">
+                <button onclick="cerrarLey()"><i class="fa-solid fa-arrow-left"></i></button>
+                <div class="modal-titulo">
+                    <div style="font-size:.85rem">BOLETÍN OFICIAL DEL REINO DE GATOLANDIA</div>
+                    <div style="font-size:.75rem;opacity:.9">Publicación oficial del Estado</div>
+                </div>
+                <button onclick="copiarLey()"><i class="fa-solid fa-copy"></i></button>
+                <input type="text" id="buscadorLey" placeholder="Buscar en esta ley..." style="padding:5px;border-radius:5px;border:none;width:200px">
+                <button onclick="window.print()"><i class="fa-solid fa-print"></i></button>
+                <button onclick="window.print()"><i class="fa-solid fa-file-pdf"></i></button>
+            </div>
+            <div class="modal-cuerpo">
+                <aside>
+                    <h3>Índice</h3>
+                    <div id="indice"></div>
+                    <hr>
+                    <strong>Estado</strong>
+                    <div id="estado"></div>
+                </aside>
+                <div style="flex:1;display:flex;flex-direction:column;overflow:hidden">
+                    <article id="textoLey"></article>
+                    <section id="historial" style="display:none">
+                        <h3>Historial de modificaciones</h3>
+                        <ul id="listaHistorial"></ul>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/gh/cocacolalandia/gatolandia@latest/leyes.js"></script>
+    <script>
+        const lista = document.getElementById('lista');
+        const modal = document.getElementById('modal');
+        const textoLey = document.getElementById('textoLey');
+        const indice = document.getElementById('indice');
+        const estadoEl = document.getElementById('estado');
+        const historialBloque = document.getElementById('historial');
+        const listaHistorial = document.getElementById('listaHistorial');
+        let textoOriginal = '';
+        LEYES.forEach(l => {
+            const d = document.createElement('div');
+            d.className = 'ley';
+            d.innerHTML = `<h2>${l.titulo}</h2><div class="meta">${l.meta}</div><button class="btn">Abrir ley</button>`;
+            d.querySelector('button').onclick = () => abrirLey(l);
+            lista.appendChild(d);
+        });
+
+        function abrirLey(l) {
+            textoLey.innerHTML = '';
+            indice.innerHTML = '';
+            listaHistorial.innerHTML = '';
+            estadoEl.textContent = l.estado;
+            textoOriginal = l.texto;
+            l.texto.split('\n').forEach((line, i) => {
+                const div = document.createElement('div');
+                div.textContent = line;
+                if (line.startsWith('TÍTULO') || line.startsWith('Artículo')) {
+                    div.id = 'p' + i;
+                    const a = document.createElement('a');
+                    a.textContent = line;
+                    a.href = '#' + div.id;
+                    indice.appendChild(a);
+                }
+                textoLey.appendChild(div);
+            });
+            if (l.historial && l.historial.length) {
+                historialBloque.style.display = 'block';
+                l.historial.forEach(h => {
+                    const li = document.createElement('li');
+                    li.textContent = h;
+                    listaHistorial.appendChild(li);
+                });
+            } else historialBloque.style.display = 'none';
+            modal.classList.add('activo');
+        }
+
+        function cerrarLey() {
+            modal.classList.remove('activo');
+        }
+
+        function copiarLey() {
+    if (!textoOriginal) return;
+
+    // 1. Crear el elemento temporal
+    const textArea = document.createElement("textarea");
+    textArea.value = textoOriginal;
+    
+    // 2. Asegurarnos de que sea invisible pero esté en el DOM
+    textArea.style.position = "absolute";
+    textArea.style.left = "-9999px";
+    textArea.style.top = "0";
+    document.body.appendChild(textArea);
+    
+    // 3. Selección y copia (el truco está en estas líneas)
+    textArea.focus();
+    textArea.select();
+    textArea.setSelectionRange(0, 99999); // Para móviles
+    
+    try {
+        const exitoso = document.execCommand('copy');
+        if (exitoso) {
+            alert("¡Copiado con éxito!");
+        } else {
+            console.error("No se pudo copiar");
+        }
+    } catch (err) {
+        console.error("Error al intentar copiar:", err);
+    }
+    
+    // 4. Limpiar
+    document.body.removeChild(textArea);
+}
+
+        // Buscador en la ley
+        const buscadorLey = document.getElementById('buscadorLey');
+        buscadorLey.addEventListener('input', () => {
+            const q = buscadorLey.value.trim();
+            const regex = new RegExp(q, 'gi');
+            textoLey.querySelectorAll('div').forEach(d => {
+                d.style.background = '';
+                if (q && regex.test(d.textContent)) d.style.background = 'yellow';
+            });
+        });
+
+        // Buscador global
+        const buscadorGlobal = document.getElementById('buscadorGlobal');
+        buscadorGlobal.addEventListener('input', () => {
+            const q = buscadorGlobal.value.trim().toLowerCase();
+            lista.querySelectorAll('.ley').forEach(l => {
+                const texto = l.querySelector('.meta').previousSibling.textContent + l.querySelector('.meta').textContent;
+                l.style.display = texto.toLowerCase().includes(q) ? 'block' : 'none';
+            });
+        });
+    </script>
+</body>
+
+</html>
