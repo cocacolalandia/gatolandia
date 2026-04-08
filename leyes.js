@@ -1614,11 +1614,9 @@ El direccional debe ir centrado en el itinerario.
 La advertencia debe ocupar todo el ancho del paso.
 
 2. Escaleras
-Direccional perpendicular al sentido de la marcha antes de la escalera.
+Direccional perpendicular al sentido de la marcha antes de la escalera, tanto en la parte baja como en la alta.
 
 A 30 cm del primer escalón.
-
-En el final de la escalera: advertencia.
 
 Anchura igual a la escalera.
 
