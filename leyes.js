@@ -1212,7 +1212,7 @@ La presente Ley entrará en vigor inmediatamente de su publicación en el Bolet�
             },
             {
                 id: 'educacion',
-                titulo: 'Ley Orgánica de Educación del Reino Democrático de Gatolandia',
+                titulo: 'Ley Orgánica de Educación',
                 meta: 'BOR nº 005 · 6 de marzo de 2023 · Asamblea Nacional',
                 estado: 'Vigente',
                 texto: `LEY ORGÁNICA DE EDUCACIÓN DEL REINO DEMOCRÁTICO DE GATOLANDIA
